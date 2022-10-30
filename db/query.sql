@@ -1,0 +1,1 @@
+-- SELECT * FROM department, employee_role, employee;
