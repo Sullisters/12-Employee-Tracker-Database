@@ -93,20 +93,99 @@ function addDepartment() {
     ]).then(answer => {
         db.query('INSERT INTO department SET ?', {
             department_name:answer.department_name
-        }, (err) => {
-            if (error) throw error;
-            console.log('Department added')
-        }
-        )
+        })
         beginQuestions();
     })
 }
 
-// function addRole() {}
+function addRole() {
+    inquirer.prompt([
+        {
+            name: 'title',
+            type: 'input',
+            message: 'Enter new Role name'
+        },
+        {
+            name: 'salary',
+            type: 'input',
+            message: 'Enter Salary'
+        },
+        {
+            name: 'department_id',
+            type: 'input',
+            message: 'Enter Department ID number'
+        }
+    ]).then(answer => {
+        db.query('INSERT INTO employee_role SET ?', {
+            title:answer.title,
+            salary:answer.salary,
+            department_id:answer.department_id
+        })
+        beginQuestions();
+    })
+}
 
-// function addEmployee() {}
+function addEmployee() {
+    inquirer.prompt([
+        {
+            name: 'first_name',
+            type: 'input',
+            message: 'Enter Employee first name'
+        },
+        {
+            name: 'last_name',
+            type: 'input',
+            message: 'Enter Employee last name'
+        },
+        {
+            name: 'role_id',
+            type: 'input',
+            message: 'Enter Employee role ID number'
+        },
+        {
+            name: 'manager_id',
+            type: 'input',
+            message: 'Enter Employee Manager ID number'
+        }
+    ]).then(answer => {
+        db.query('INSERT INTO employee SET ?', {
+            first_name:answer.first_name,
+            last_name:answer.last_name,
+            role_id:answer.role_id,
+            manager_id:answer.manager_id
+        })
+        beginQuestions();
+    })
+}
 
-// function updateEmployeeRole() {}
+const employeeChoices = () => {
+    const employeeQuery = `SELECT first_name FROM employee;`;
+    const employees = db.query(employeeQuery);
+    return employees[0];
+}
+
+function updateEmployeeRole() {
+    inquirer.prompt([
+        {
+            message: 'Choose an Employee to Update',
+            name: 'update_employee',
+            type: 'list',
+            choices: employeeChoices(),
+            when(answers) {
+                return answers.task === 'View all employees';
+            }
+        }
+    ])
+    // .then(answer => {
+    //     db.query('INSERT INTO employee SET ?', {
+    //         first_name:answer.first_name,
+    //         last_name:answer.last_name,
+    //         role_id:answer.role_id,
+    //         manager_id:answer.manager_id
+    //     })
+    //     beginQuestions();
+    // })
+}
 
 app.use((req,res) => {
     res.status(404).end();
