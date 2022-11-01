@@ -158,33 +158,30 @@ function addEmployee() {
     })
 }
 
-const employeeChoices = () => {
-    const employeeQuery = `SELECT first_name FROM employee;`;
-    const employees = db.query(employeeQuery);
-    return employees[0];
-}
-
 function updateEmployeeRole() {
     inquirer.prompt([
         {
-            message: 'Choose an Employee to Update',
-            name: 'update_employee',
+            name: 'first_name',
             type: 'list',
-            choices: employeeChoices(),
-            when(answers) {
-                return answers.task === 'View all employees';
-            }
+            message: 'Choose Employee to Update',
+            choices: ['Philip','Sarah','Regina','Daniel']
+        },
+        {
+            name: 'title',
+            type: 'list',
+            message: 'Choose which Role ID update to',
+            choices: [2,4,5,6]
         }
     ])
-    // .then(answer => {
-    //     db.query('INSERT INTO employee SET ?', {
-    //         first_name:answer.first_name,
-    //         last_name:answer.last_name,
-    //         role_id:answer.role_id,
-    //         manager_id:answer.manager_id
-    //     })
-    //     beginQuestions();
-    // })
+    .then(answer => {
+        // db.query(`UPDATE employee_role WHERE SET ?`, {
+        //     title:answer.title
+        // })
+        // db.query('UPDATE employee WHERE SET ?', {
+        //     first_name: answer.first_name
+        // })
+        beginQuestions();
+    })
 }
 
 app.use((req,res) => {
@@ -193,4 +190,4 @@ app.use((req,res) => {
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-});
+})
