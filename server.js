@@ -8,6 +8,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+//Create a Dababase(db) to connect to mysql using the following variables
 const db = mysql.createConnection(
     {
         host: 'localhost',
@@ -28,7 +29,9 @@ function beginQuestions() {
             choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role'],
             message: 'Please choose one of the following'
         }
-    ]).then(answers => {
+    ])
+    //Once the use chooses from the list, the relevant function will execute
+    .then(answers => {
         switch (answers.question) {
             case 'View all departments':
                 viewDepartment();
@@ -69,20 +72,28 @@ function viewDepartment() {
     })
 }
 
+//View all Employee Roles
 function viewRoles() {
-    db.query('SELECT * FROM employee_role', function(err, results) {
+    db.query(
+    'SELECT employee_role.title, employee_role.salary, employee_role.id, department.department_name FROM employee_role JOIN department ON employee_role.department_id=department.id;'
+
+    // 'SELECT * FROM employee_role'
+    , function(err, results) {
         console.table(results);
         beginQuestions()
     })
 }
 
+//View all Employees
 function viewEmployees() {
-    db.query('SELECT * FROM employee', function(err, results) {
+    db.query('SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, employee_role.salary, employee.manager_id, department.department_name FROM employee JOIN employee_role ON employee.role_id=employee_role.id JOIN department ON employee_role.department_id=department.id;',
+     function(err, results) {
         console.table(results);
         beginQuestions()
     })
 }
 
+//Add a Department Name
 function addDepartment() {
     inquirer.prompt([
         {
@@ -98,6 +109,7 @@ function addDepartment() {
     })
 }
 
+//Add an Employee Role
 function addRole() {
     inquirer.prompt([
         {
@@ -125,6 +137,7 @@ function addRole() {
     })
 }
 
+//Add an Employee Name
 function addEmployee() {
     inquirer.prompt([
         {
@@ -158,6 +171,7 @@ function addEmployee() {
     })
 }
 
+//Update an Employee Role
 async function updateEmployeeRole() {
     const updatedRole = await inquirer.prompt([
         {
