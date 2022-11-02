@@ -158,7 +158,7 @@ function addEmployee() {
     })
 }
 
-function updateEmployeeRole() {
+async function updateEmployeeRole() {
     inquirer.prompt([
         {
             name: 'first_name',
@@ -174,9 +174,18 @@ function updateEmployeeRole() {
         }
     ])
     .then(answer => {
-        // db.query(`UPDATE employee_role WHERE SET ?`, {
+        db.query(`UPDATE employee SET role_id = ? WHERE first_name = ?`, 
+        [title, first_name], (err, results) => {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log(results)
+            }
+        }
+        // {
         //     title:answer.title
-        // })
+        // }
+        )
         // db.query('UPDATE employee WHERE SET ?', {
         //     first_name: answer.first_name
         // })
