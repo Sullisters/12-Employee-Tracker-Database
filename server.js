@@ -1,6 +1,7 @@
 const express = require('express');
 const  mysql = require('mysql2');
 const inquirer = require('inquirer');
+const figlet = require('figlet');
 
 const PORT = process.env.port || 3001;
 const app = express();
@@ -19,6 +20,22 @@ const db = mysql.createConnection(
     console.log(`Connected to the employees_db database`),
     beginQuestions()
 );
+
+//Figlet 'Employee Manager'
+figlet.text('Employee Manager', {
+    font: 'Chunky',
+    horizontalLayout: 'default',
+    verticalLayout: 'default',
+    width: 80,
+    whitespaceBreak: true
+}, function(err, data) {
+    if (err) {
+        console.log('Something went wrong...');
+        console.dir(err);
+        return;
+    }
+    console.log(data);
+});
 
 //Begin Inquirer Prompts
 function beginQuestions() {
