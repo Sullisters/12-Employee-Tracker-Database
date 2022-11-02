@@ -159,7 +159,7 @@ function addEmployee() {
 }
 
 async function updateEmployeeRole() {
-    inquirer.prompt([
+    const updatedRole = await inquirer.prompt([
         {
             name: 'first_name',
             type: 'list',
@@ -173,25 +173,16 @@ async function updateEmployeeRole() {
             choices: [2,4,5,6]
         }
     ])
-    .then(answer => {
-        db.query(`UPDATE employee SET role_id = ? WHERE first_name = ?`, 
-        [title, first_name], (err, results) => {
+    db.query(`UPDATE employee SET role_id = ? WHERE first_name = ?`, 
+        [updatedRole.title, updatedRole.first_name], (err, results) => {
             if (err) {
                 console.log(err)
             } else {
-                console.log(results)
+                // console.log(results)
             }
-        }
-        // {
-        //     title:answer.title
-        // }
-        )
-        // db.query('UPDATE employee WHERE SET ?', {
-        //     first_name: answer.first_name
-        // })
-        beginQuestions();
-    })
-}
+            beginQuestions();
+        })
+    }  
 
 app.use((req,res) => {
     res.status(404).end();
